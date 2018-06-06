@@ -116,11 +116,12 @@ container_image(
     },
 )
 
+# Push the base up to gcr.io with a tag that matches the bazel version.
 container_push(
     name = "gcr",
     format = "Docker",
     image = ":base",
     registry = "gcr.io",
     repository = "stack-build/distroless/bazel",
-    tag = "latest",
+    tag = "0.12.0",
 )

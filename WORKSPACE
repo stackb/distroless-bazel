@@ -16,7 +16,7 @@ go_rules_dependencies()
 go_register_toolchains(go_version = "1.9")
 
 #############################################################
-# DOCKER
+# RULES_DOCKER
 #############################################################
 
 RULES_DOCKER_VERSION = "553d5506bb7325185950f91533b967da8f5bc536"
@@ -50,6 +50,9 @@ container_pull(
   digest = "sha256:625c3584876171c6d786d8d8a74b2aaceac06fef450e7fd7322247464f118aa9",
 )
 
+#############################################################
+# DISTROLESS
+#############################################################
 
 git_repository(
     name = "distroless",
@@ -65,12 +68,6 @@ load(
 )
 
 package_manager_repositories()
-
-http_file(
-    name = "bazel_release",
-    sha256 = "3d94ca21477289fa369c6077564719dbd89052e6199a527cfa0506bb41c82cd5",
-    url = "https://github.com/bazelbuild/bazel/releases/download/0.12.0/bazel_0.12.0-linux-x86_64.deb",
-)
 
 dpkg_src(
     name = "debian_stretch",
@@ -240,3 +237,12 @@ dpkg_list(
     ],
 )
 
+#############################################################
+# BAZEL
+#############################################################
+
+http_file(
+    name = "bazel_release",
+    sha256 = "3d94ca21477289fa369c6077564719dbd89052e6199a527cfa0506bb41c82cd5",
+    url = "https://github.com/bazelbuild/bazel/releases/download/0.12.0/bazel_0.12.0-linux-x86_64.deb",
+)

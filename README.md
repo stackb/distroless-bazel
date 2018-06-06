@@ -13,9 +13,12 @@
 This repository houses instructions for generating a container image containing
 bazel in the style of [distroless](https://github.com/GoogleContainerTools/distroless).
 
-## Usage
+## Versions
 
-For general usage, pull the image directly `docker pull gcr.io/stacbk-build/distroless/bazel`.
+| Bazel Version | Tag | Size | 
+| ---: | :--- | :--- |
+| 0.12.0 | [gcr.io/stack-build/distroless/bazel:0.12.0](https://console.cloud.google.com/gcr/images/stack-build/GLOBAL/distroless/bazel) | 248MB |
+
 
 ## Development
 
