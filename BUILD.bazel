@@ -1,3 +1,5 @@
+package(default_visibility = ["//visibility:public"])
+
 load("@io_bazel_rules_docker//container:push.bzl", "container_push")
 load("@io_bazel_rules_docker//container:image.bzl", "container_image")
 load("@package_bundle//file:packages.bzl", "packages")
@@ -6,7 +8,6 @@ container_image(
     name = "base",
     base = "@java_image_base//image",
     debs = [
-        "@bazel_release//file",
         packages["openjdk-8-jdk-headless"],
         packages["libpython2.7-minimal"],
         packages["python2.7-minimal"],
@@ -110,18 +111,34 @@ container_image(
         "/usr/bin/jarsigner": "/usr/lib/jvm/java-8-openjdk-amd64/bin/jarsigner",
         "/usr/bin/javadoc": "/usr/lib/jvm/java-8-openjdk-amd64/bin/javadoc",
         "/usr/bin/javap": "/usr/lib/jvm/java-8-openjdk-amd64/bin/javap",
-        "/usr/bin/bazel": "/usr/bin/bazel-real",
         "/usr/bin/gcc": "/usr/bin/gcc-6",
         "/usr/bin/g++": "/usr/bin/g++-6",
     },
 )
 
-# Push the base up to gcr.io with a tag that matches the bazel version.
-container_push(
-    name = "gcr",
+VERSIONS = ["0.12.0", "0.14.0", "0.14.1"]
+
+
+[container_image(
+    name = "bazel_%s" % version,
+    base = ":base",
+    debs = [
+        "@bazel_release_%s//file" % version.replace('.', '_'),
+    ],
+    symlinks = {
+        "/usr/bin/bazel": "/usr/bin/bazel-real",
+    },
+    entrypoint = [
+        "/usr/bin/bazel",
+    ],
+) for version in VERSIONS]
+ 
+[container_push(
+    name = version,
     format = "Docker",
-    image = ":base",
+    image = ":bazel_%s" % version,
     registry = "gcr.io",
     repository = "stack-build/distroless/bazel",
-    tag = "0.12.0",
-)
+    tag = version,
+) for version in VERSIONS]
+

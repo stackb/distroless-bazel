@@ -241,8 +241,15 @@ dpkg_list(
 # BAZEL
 #############################################################
 
-http_file(
-    name = "bazel_release",
-    sha256 = "3d94ca21477289fa369c6077564719dbd89052e6199a527cfa0506bb41c82cd5",
-    url = "https://github.com/bazelbuild/bazel/releases/download/0.12.0/bazel_0.12.0-linux-x86_64.deb",
-)
+VERSIONS = {
+    "0.12.0": "3d94ca21477289fa369c6077564719dbd89052e6199a527cfa0506bb41c82cd5",
+    "0.14.0": "0d05210e0f68ba46dcef986c16acb486c16348fb373819f76658447c12ad9d89",
+    "0.14.1": "31946d067901fb10e38a6497996906b5c777feffabe1b3de0039cac0c3c02318",
+}
+
+[http_file(
+    name = "bazel_release_%s" % version.replace('.', '_'),
+    sha256 = sha256,
+    url = "https://github.com/bazelbuild/bazel/releases/download/{v}/bazel_{v}-linux-x86_64.deb".format(v = version),
+) for version, sha256 in VERSIONS.items()]
+
