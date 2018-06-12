@@ -3,6 +3,7 @@ package(default_visibility = ["//visibility:public"])
 load("@io_bazel_rules_docker//container:push.bzl", "container_push")
 load("@io_bazel_rules_docker//container:image.bzl", "container_image")
 load("@package_bundle//file:packages.bzl", "packages")
+load("//:deps.bzl", "BAZEL_RELEASES")
 
 container_image(
     name = "base",
@@ -116,9 +117,6 @@ container_image(
     },
 )
 
-VERSIONS = ["0.12.0", "0.14.0", "0.14.1"]
-
-
 [container_image(
     name = "bazel_%s" % version,
     base = ":base",
@@ -131,7 +129,7 @@ VERSIONS = ["0.12.0", "0.14.0", "0.14.1"]
     entrypoint = [
         "/usr/bin/bazel",
     ],
-) for version in VERSIONS]
+) for version in BAZEL_RELEASES.keys()]
  
 [container_push(
     name = version,
@@ -140,5 +138,5 @@ VERSIONS = ["0.12.0", "0.14.0", "0.14.1"]
     registry = "gcr.io",
     repository = "stack-build/distroless/bazel",
     tag = version,
-) for version in VERSIONS]
+) for version in BAZEL_RELEASES.keys()]
 
