@@ -132,11 +132,20 @@ container_image(
 ) for version in BAZEL_RELEASES.keys()]
  
 [container_push(
-    name = version,
+    name = "gcr." + version,
     format = "Docker",
     image = ":bazel_%s" % version,
     registry = "gcr.io",
     repository = "stack-build/distroless/bazel",
+    tag = version,
+) for version in BAZEL_RELEASES.keys()]
+ 
+[container_push(
+    name = "dockerhub." + version,
+    format = "Docker",
+    image = ":bazel_%s" % version,
+    registry = "index.docker.io",
+    repository = "stackb/distroless-bazel",
     tag = version,
 ) for version in BAZEL_RELEASES.keys()]
 
